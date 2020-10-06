@@ -22,4 +22,9 @@ jobs:
     - name: Build
       run: dotnet build --configuration Release --no-restore
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity minimal --collect "Code Coverage"
+    - name: Archive test Coverage
+      uses: actions/upload-artifact@v2
+      with:
+        name: code-coverage-report
+        path: CiDotNet.Calc.Tests\TestResults\**\*.coverage
