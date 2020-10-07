@@ -20,7 +20,7 @@ jobs:
     - name: Install dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --configuration Release --no-restore -p:Version=${{ github.run_number }}
     - name: Test
       run: dotnet test --no-restore --verbosity minimal --collect "Code Coverage"
     - name: Archive test Coverage
@@ -28,4 +28,22 @@ jobs:
       with:
         name: code-coverage-report
         path: CiDotNet.Calc.Test\TestResults\**\*.coverage
-              
+    - name: Publish
+      run: dotnet publish /p:PublishProfile=FolderProfile 
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1.1.4
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.run_number }}
+        release_name: Release ${{ github.run_number }}
+    - name: Upload a Release Asset
+      uses: actions/upload-release-asset@v1.0.2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: CiDotNet.WpfCalc\bin\Release\netcoreapp3.1\publish\CiDotNet.WpfCalc.exe
+        asset_name: CiDotNet.WpfCalc.exe
+        asset_content_type: application/x-dosexec
