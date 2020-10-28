@@ -6,7 +6,6 @@
         {
             BeginMode = 1, EndMode = 0
         }
-
         private static double CalculateSPPV(double compoundPeriods, double periodicInterestRate)
         {
             return System.Math.Pow(1.0 + (periodicInterestRate / 100), -compoundPeriods);
@@ -58,6 +57,5 @@
                 );
 
         }
-
     }
 }
