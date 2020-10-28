@@ -2,7 +2,9 @@ name: CiDotNet
 
 on:
   push:
-    branches: [ ** ]
+    branches: 
+    - '**'
+    - '!mk1'
   pull_request:
     branches: [ master ]
 
